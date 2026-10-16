@@ -5,7 +5,9 @@
   "status": "geplant",
   "zeit": "2026-10-17T12:00",
   "tiktok": "entwurf",
-  "insta": ""
+  "insta": "",
+  "tiktok_fehler": "",
+  "insta_fehler": ""
  },
  {
   "id": "2026-10-16-18-horror",
@@ -13,7 +15,9 @@
   "status": "geplant",
   "zeit": "2026-10-16T18:00",
   "tiktok": "entwurf",
-  "insta": ""
+  "insta": "",
+  "tiktok_fehler": "",
+  "insta_fehler": ""
  },
  {
   "id": "2026-10-17-12-wg-chat",
@@ -21,7 +25,9 @@
   "status": "ersetzt",
   "zeit": "2026-10-17T12:00",
   "tiktok": "",
-  "insta": ""
+  "insta": "",
+  "tiktok_fehler": "",
+  "insta_fehler": ""
  },
  {
   "id": "2026-10-16-12-pov-18uhr",
@@ -29,6 +35,8 @@
   "status": "geplant",
   "zeit": "2026-10-16T12:00",
   "tiktok": "entwurf",
-  "insta": "fehler"
+  "insta": "fehler",
+  "tiktok_fehler": "",
+  "insta_fehler": "Invalid OAuth access token - Cannot parse access token"
  }
 ]
