@@ -540,6 +540,7 @@ def main():
     elif cmd in ('loop', 'resend-offen'):
         if cmd == 'resend-offen':
             offene_neu_senden(z)
+            speichere_zustand(z); schreibe_diagnose(z, cmd); sichern()
         # läuft ca. 55 Minuten und prüft jede Minute; GitHub startet alle 30 Minuten einen neuen Lauf (wartet in der Schlange)
         ende = time.time() + int(os.environ.get('PB_LOOP_MIN', '55')) * 60
         while True:
