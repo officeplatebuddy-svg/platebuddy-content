@@ -285,10 +285,19 @@ def nachricht(z, m):
 def freigabe_senden(z, e):
     """Schickt Vorschau-Video + Freigabe-Nachricht mit allen Knöpfen. True bei Erfolg."""
     pid, termin, bilder, art = e['id'], e.get('zeit', ''), e.get('bilder') or [], e.get('art')
-    st, j = tg('sendVideo', chat_id=CHAT, video=e.get('vorschau') or e.get('video'), caption=e['titel'][:1000])
-    mid = (j.get('result') or {}).get('message_id') if isinstance(j, dict) else None
+    mid = None
+    if art == 'fotos' and bilder:                # Slideshow als Album zum selbst Durchwischen
+        media = [{'type': 'photo', 'media': u} for u in bilder[:10]]
+        media[0]['caption'] = e['titel'][:1000]
+        st, j = tg('sendMediaGroup', chat_id=CHAT, media=media)
+        res = j.get('result') if isinstance(j, dict) and j.get('ok') else None
+        if isinstance(res, list) and res:
+            mid = res[0].get('message_id')
+    if mid is None:
+        st, j = tg('sendVideo', chat_id=CHAT, video=e.get('vorschau') or e.get('video'), caption=e['titel'][:1000])
+        mid = (j.get('result') or {}).get('message_id') if isinstance(j, dict) else None
     wann = (f'\n\n🗓 Geplant für {termin[8:10]}.{termin[5:7]}. um {termin[11:]} Uhr' if termin else '\n\n🗓 Ohne Termin')
-    was = f'Slideshow zum Wischen ({len(bilder)} Bilder, hier als Vorschau-Video)' if art == 'fotos' else 'Video'
+    was = f'Slideshow zum Wischen ({len(bilder)} Bilder, oben als Album)' if art == 'fotos' else 'Video'
     text = (f'<b>{esc(e["titel"])}</b>\n{was}{wann}' + (f'\n🎵 Sound-Idee: {esc(e.get("sound"))}' if e.get('sound') else '') +
             f'\n\n<b>Beschreibung:</b>\n{esc(e.get("caption"))}\n\n✅ Go: kommt gleich als Entwurf in dein TikTok-Postfach, zum Termin erinnere ich dich.'
             '\n🔁 Neu: Claude baut eine andere Version.\n❌ Verwerfen: wird nicht gepostet.\n📸 Insta 19:00: geht zusätzlich als Reel auf Instagram.')
