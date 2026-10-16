@@ -29,13 +29,13 @@ Ergebnis in posts/<id>/out/: bild-01.jpg … (für TikTok), vorschau.mp4 (für T
 Das Skript meldet fehlende Dateien und Elemente außerhalb des sicheren Bereichs. Telefone, Karten und Zierflächen dürfen hinausragen, Text nicht.
 
 4. REGELN FÜR JEDEN BEITRAG
-- 1080 x 1920, 5 bis 7 Bilder. Bild 1: eine Frage oder ein Alltagsproblem in sehr großer Schrift. Mitte: je Bild ein Nutzen mit echtem Screenshot. Letztes Bild: Schlusskarte.
+- 1080 x 1440 (3:4!), 5 bis 7 Bilder. TikTok zeigt Foto-Slideshows im 3:4-Ausschnitt, 9:16 wird oben und unten abgeschnitten (16.10.2026). Bild 1: eine Frage oder ein Alltagsproblem in sehr großer Schrift. Mitte: je Bild ein Nutzen mit echtem Screenshot. Letztes Bild: Schlusskarte.
 - Schlusskarte immer: App-Icon, „PlateBuddy“, „Bald im App Store“, „Folgen, damit du den Start nicht verpasst.“
 - Nie: „Jetzt laden“, „Link in Bio“, „kostenlos“, Preise, Aussagen zu Pro, erfundene Zahlen, echte Personen oder fremde Marken.
 - Keine absoluten Versprechen („erkennt alles“, „nie wieder“). Nährwerte aus Fotos heißen Schätzung.
 - KI nicht betonen: „Foto“, „Planen“, „Rezept“. Kein Sparkle-Symbol in eigenen Grafiken.
 - Schreibweise „PlateBuddy“ in einem Wort. Texte nennen den Nutzen, keine Bedienschritte („öffnen“, „tippen“).
-- Sicherer Bereich: Text bleibt in x 70–930, y 200–1500 (oben 200, unten 420, rechts 150 px frei).
+- Sicherer Bereich: Text bleibt in x 60–900, y 120–1260 (oben 120 Suchleiste, unten 180 Einblendungen, rechts 180 px für die Like-Knöpfe frei). .safe ist 840×1140.
 - Farben: Creme #F7F4EC, Deep Forest #07130C, Cook Surface #102E23, Brand Green #20C060, Leaf Green #189048, Status Orange #EC7F43. Schrift Inter / Inter Display. Emoji aus Noto Color Emoji als Bildelemente.
 - Themen wechseln: Zutaten → Rezept, Kochmodus, Wochenplan, Einkauf, Vorrat, Kalorien, gemeinsamer Haushalt. Kein Thema zweimal hintereinander. Aufbau und Titelbild variieren, nicht jedes Mal dieselbe Vorlage.
 - Beschreibung (Caption): ein bis zwei Sätze zum Nutzen, eine Frage für Kommentare, „Bald im App Store.“, drei bis fünf Hashtags, immer #platebuddy.

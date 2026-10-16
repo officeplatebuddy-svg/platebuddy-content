@@ -1,8 +1,8 @@
 :root{--cream:#F7F4EC;--paper:#EFEADB;--forest:#07130C;--surface:#102E23;--green:#20C060;--leaf:#189048;--muted:#5E6B62;--orange:#EC7F43}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#222;font-family:"Inter",sans-serif;-webkit-font-smoothing:antialiased}
-.slide{position:relative;width:1080px;height:1920px;overflow:hidden}
-.safe{position:absolute;left:70px;top:200px;width:860px;height:1300px}
+.slide{position:relative;width:1080px;height:1440px;overflow:hidden}
+.safe{position:absolute;left:60px;top:120px;width:840px;height:1140px}
 .cream{background:var(--cream);color:var(--forest)}
 .dark{background:var(--surface);color:var(--cream)}
 .forest{background:var(--forest);color:var(--cream)}
