@@ -592,6 +592,14 @@ def main():
         tiktok_link(z)
     elif cmd == 'connect':
         tiktok_verbinden(z, sys.argv[2])
+    elif cmd == 'insta-jetzt':                          # einen Beitrag sofort auf Instagram (wie der Knopf „Jetzt nochmal versuchen“)
+        bid = (os.environ.get('BEITRAG') or (sys.argv[2] if len(sys.argv) > 2 else '')).strip()
+        e = z['beitraege'].get(bid)
+        if not e:
+            log('Beitrag nicht gefunden:', bid)
+        elif e.get('insta') != 'online':
+            e['insta'] = 'geplant'; e['insta_zeit'] = jetzt(); e.pop('insta_versuche', None)
+        durchlauf(z)
     elif cmd in ('loop', 'resend-offen'):
         if cmd == 'resend-offen':
             offene_neu_senden(z)

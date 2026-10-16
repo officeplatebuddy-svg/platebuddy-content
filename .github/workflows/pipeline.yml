@@ -9,7 +9,11 @@ on:
         description: 'run = normaler Lauf, connect-start = TikTok-Verbinden-Link nach Telegram schicken'
         default: loop
         type: choice
-        options: [loop, run, connect-start, resend-offen]
+        options: [loop, run, connect-start, resend-offen, insta-jetzt]
+      beitrag:
+        description: 'nur für insta-jetzt: Kennung des Beitrags'
+        default: ''
+        type: string
 
 concurrency:
   group: platebuddy-pipeline
@@ -62,6 +66,7 @@ jobs:
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
           STATE_KEY: ${{ secrets.STATE_KEY }}
           AKTION: ${{ inputs.aktion || 'loop' }}
+          BEITRAG: ${{ inputs.beitrag || '' }}
           PB_STATE_DIR: ${{ github.workspace }}/_state
         run: python3 pipeline/pipeline.py "$AKTION"
 
