@@ -1,5 +1,5 @@
 {
- "zeit": "2026-10-16T08:54:14+00:00",
+ "zeit": "2026-10-16T08:56:12+00:00",
  "aktion": "run",
  "telegram": {
   "getWebhookInfo": "ok",
@@ -13,6 +13,6 @@
   "tiktok_secret": true,
   "instagram": true
  },
- "tiktok_verbunden": false,
+ "tiktok_verbunden": true,
  "offene_notizen": 0
 }
