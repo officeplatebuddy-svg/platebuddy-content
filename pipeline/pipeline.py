@@ -33,7 +33,7 @@ TG_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '').strip()
 TT_KEY = os.environ.get('TIKTOK_CLIENT_KEY', '').strip()
 TT_SECRET = os.environ.get('TIKTOK_CLIENT_SECRET', '').strip()
 IG_TOKEN_SECRET = os.environ.get('INSTAGRAM_TOKEN', '').strip()
-STATE_KEY = os.environ.get('STATE_KEY', '').strip()
+STATE_KEY = os.environ.get('STATE_KEY', '')
 
 for _s in (TG_TOKEN, TT_SECRET, IG_TOKEN_SECRET, STATE_KEY):   # in GitHub-Logs verbergen
     if _s and os.environ.get('GITHUB_ACTIONS'):
