@@ -128,7 +128,8 @@ def speichere_zustand(z):
     (STATE_DIR / 'state.enc').write_bytes(fernet().encrypt(json.dumps(z, ensure_ascii=False).encode()))
     # öffentliche Kurzliste für die Claude-Aufgabe (ohne Inhalte aus dem Chat)
     offen = [{'id': e['id'], 'titel': e.get('titel', ''), 'status': e.get('status'), 'zeit': e.get('zeit', ''),
-              'tiktok': e.get('tiktok', ''), 'insta': e.get('insta', '')}
+              'tiktok': e.get('tiktok', ''), 'insta': e.get('insta', ''),
+              'tiktok_fehler': e.get('tiktok_fehler', ''), 'insta_fehler': e.get('insta_fehler', '')}
              for e in sorted(z['beitraege'].values(), key=lambda x: x.get('geliefert', ''), reverse=True)[:30]]
     (STATE_DIR / 'beitraege-status.json').write_text(json.dumps(offen, ensure_ascii=False, indent=1))
     wuensche = [{'id': e['id'], 'titel': e.get('titel', ''), 'zeit': e.get('zeit', ''), 'wunsch': e.get('wunsch', ''),
@@ -559,6 +560,8 @@ def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else 'run'
     z = lade_zustand()
     vorher = json.dumps(z, sort_keys=True)
+    if not z['hinweise'].get('status_v3'):
+        z['hinweise']['status_v3'] = True
     if not z['hinweise'].get('insta_knopf_v2'):        # einmalig: Insta-Knopf für schon freigegebene Posts nachreichen
         z['hinweise']['insta_knopf_v2'] = True
         for e in z['beitraege'].values():
