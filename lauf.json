@@ -1,8 +1,9 @@
 {
- "zeit": "2026-10-16T11:31:42+00:00",
+ "zeit": "2026-10-16T12:27:48+00:00",
  "aktion": "loop",
  "telegram": {
-  "sendMessage": "ok"
+  "getWebhookInfo": "ok",
+  "getUpdates": "ok"
  },
  "fehler": [],
  "secrets": {
