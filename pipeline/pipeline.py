@@ -259,6 +259,22 @@ def nachricht(z, m):
         return
     text = (m.get('text') or '').strip()
     wer = (m.get('from') or {}).get('first_name') or 'Jemand'
+    if text.lower().startswith(('/plan', '/heute')):
+        heute = jetzt()[:10]
+        morgen = (dt.datetime.now(WIEN) + dt.timedelta(days=1)).strftime('%Y-%m-%d')
+        zeilen = []
+        for e in sorted(z['beitraege'].values(), key=lambda x: (x.get('zeit') or '9', x.get('id'))):
+            if e.get('status') in ('alt', 'ersetzt', 'verworfen') or not e.get('art'):
+                continue
+            tag_ = (e.get('zeit') or e.get('insta_zeit') or '')[:10]
+            if tag_ and tag_ not in (heute, morgen):
+                continue
+            tt = {'entwurf': '📥 im TikTok-Postfach', 'fehler': '⚠️ TikTok-Fehler'}.get(e.get('tiktok'), '⏳ wartet auf Go' if e.get('status') == 'wartet' else ('🔁 neue Version kommt' if e.get('status') == 'neu' else '…'))
+            ig = {'geplant': f'📸 Insta {e.get("insta_zeit", "")[8:10]}.{e.get("insta_zeit", "")[5:7]}. 19:00', 'online': '📸 auf Insta online', 'fehler': '⚠️ Insta-Fehler'}.get(e.get('insta'), '— kein Insta')
+            wann = f'{e["zeit"][8:10]}.{e["zeit"][5:7]}. {e["zeit"][11:]}' if e.get('zeit') else 'ohne Termin'
+            zeilen.append(f'<b>{esc(e["titel"])}</b>\n{wann} · {tt} · {ig}')
+        senden('🗓 <b>Plan heute und morgen</b>\n\n' + ('\n\n'.join(zeilen) if zeilen else 'Noch nichts geplant.'), reply_to_message_id=m.get('message_id'))
+        return
     if text.lower().startswith('/tiktok'):
         teile = text.split()
         if len(teile) >= 2:
