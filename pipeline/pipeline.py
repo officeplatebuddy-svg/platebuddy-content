@@ -208,6 +208,10 @@ def knopf(z, cq):
         hinweis = 'Hier nicht erlaubt.'
     elif not e:
         hinweis = 'Diesen Beitrag kenne ich nicht mehr.'
+    elif aktion == 'instajetzt':
+        e['insta'] = 'geplant'; e['insta_zeit'] = jetzt(); e.pop('insta_versuche', None)
+        hinweis = 'Wird jetzt nochmal versucht.'
+        senden(f'📸 Neuer Versuch für <b>{esc(e["titel"])}</b> läuft – Meldung kommt in ein paar Minuten.')
     elif aktion == 'insta':
         if e.get('insta') == 'online':
             hinweis = 'Ist schon auf Instagram.'
@@ -511,6 +515,20 @@ def ig_token(z):
     return tok
 
 
+def ig_pruefen(z):
+    """Einmal pro Lauf: Ist der Instagram-Token brauchbar? (nur Form und Ergebnis, nie der Token selbst)"""
+    if 'ig_check' in DIAG:
+        return
+    roh = IG_TOKEN_SECRET
+    form = f'Länge {len(roh)}, beginnt mit {roh[:2]!r}' if roh else 'leer'
+    tok = (z.get('instagram') or {}).get('token') or roh
+    st, j = http('GET', IG_API + 'me?' + urllib.parse.urlencode({'fields': 'user_id,username', 'access_token': tok}))
+    if isinstance(j, dict) and j.get('username'):
+        DIAG['ig_check'] = f'ok: @{j["username"]} (Secret: {form})'
+    else:
+        DIAG['ig_check'] = f'Fehler: {((j.get("error") or {}).get("message") if isinstance(j, dict) else str(j)[:100])} (Secret: {form})'
+
+
 def instagram(z):
     faellig = [e for e in z['beitraege'].values() if e.get('insta') == 'geplant' and e.get('vorschau', e.get('video')) and (e.get('insta_zeit') or '') <= jetzt()]
     if not faellig:
@@ -550,7 +568,8 @@ def instagram(z):
         else:
             grund = (j.get('error') or {}).get('message') if isinstance(j, dict) else str(j)[:200]
         e['insta'] = 'fehler'; e['insta_fehler'] = str(grund)[:500]
-        senden(f'⚠️ Instagram-Upload für <b>{esc(e["titel"])}</b> hat nicht geklappt.\nGrund: {esc(str(grund)[:300])}\nClaude schaut es sich an.')
+        senden(f'⚠️ Instagram-Upload für <b>{esc(e["titel"])}</b> hat nicht geklappt.\nGrund: {esc(str(grund)[:300])}\nClaude schaut es sich an.',
+               reply_markup={'inline_keyboard': [[{'text': '📸 Jetzt nochmal versuchen', 'callback_data': f'instajetzt|{e["id"]}'}]]})
         log('Instagram-Fehler:', e['id'], grund)
 
 
@@ -600,7 +619,7 @@ def main():
 
 
 def durchlauf(z):
-    for schritt in (telegram_lesen, neue_beitraege, tiktok_hochladen, erinnern, instagram):
+    for schritt in (telegram_lesen, neue_beitraege, tiktok_hochladen, erinnern, instagram, ig_pruefen):
         try:
             schritt(z)
         except Exception as e:
@@ -612,7 +631,8 @@ def schreibe_diagnose(z, cmd):
     STATE_DIR.mkdir(parents=True, exist_ok=True)   # öffentliche Lauf-Diagnose ohne Inhalte
     (STATE_DIR / 'lauf.json').write_text(json.dumps({'zeit': iso(), 'aktion': cmd, 'telegram': DIAG['telegram'], 'fehler': DIAG['fehler'][-10:],
         'secrets': {'telegram': bool(TG_TOKEN), 'tiktok_key': bool(TT_KEY), 'tiktok_secret': bool(TT_SECRET), 'instagram': bool(IG_TOKEN_SECRET)},
-        'tiktok_verbunden': bool((z.get('tiktok') or {}).get('refresh_token')), 'offene_notizen': sum(1 for n in z['notizen'] if n.get('status') == 'offen')}, indent=1))
+        'tiktok_verbunden': bool((z.get('tiktok') or {}).get('refresh_token')), 'offene_notizen': sum(1 for n in z['notizen'] if n.get('status') == 'offen'),
+        'instagram_check': DIAG.get('ig_check', '')}, indent=1))
 
 
 def sichern():
