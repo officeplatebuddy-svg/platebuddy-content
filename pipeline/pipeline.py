@@ -264,6 +264,34 @@ def nachricht(z, m):
 
 # ---------------------------------------------------------------- neue Beiträge
 
+def freigabe_senden(z, e):
+    """Schickt Vorschau-Video + Freigabe-Nachricht mit allen Knöpfen. True bei Erfolg."""
+    pid, termin, bilder, art = e['id'], e.get('zeit', ''), e.get('bilder') or [], e.get('art')
+    st, j = tg('sendVideo', chat_id=CHAT, video=e.get('vorschau') or e.get('video'), caption=e['titel'][:1000])
+    mid = (j.get('result') or {}).get('message_id') if isinstance(j, dict) else None
+    wann = (f'\n\n🗓 Geplant für {termin[8:10]}.{termin[5:7]}. um {termin[11:]} Uhr' if termin else '\n\n🗓 Ohne Termin')
+    was = f'Slideshow zum Wischen ({len(bilder)} Bilder, hier als Vorschau-Video)' if art == 'fotos' else 'Video'
+    text = (f'<b>{esc(e["titel"])}</b>\n{was}{wann}' + (f'\n🎵 Sound-Idee: {esc(e.get("sound"))}' if e.get('sound') else '') +
+            f'\n\n<b>Beschreibung:</b>\n{esc(e.get("caption"))}\n\n✅ Go: kommt gleich als Entwurf in dein TikTok-Postfach, zum Termin erinnere ich dich.'
+            '\n🔁 Neu: Claude baut eine andere Version.\n❌ Verwerfen: wird nicht gepostet.\n📸 Insta 19:00: geht zusätzlich als Reel auf Instagram.')
+    kb = {'inline_keyboard': [[{'text': '✅ Go', 'callback_data': f'go|{pid}'}, {'text': '🔁 Neu', 'callback_data': f'neu|{pid}'},
+                               {'text': '❌ Verwerfen', 'callback_data': f'weg|{pid}'}],
+                              [{'text': '📸 Insta 19:00', 'callback_data': f'insta|{pid}'}]]}
+    st, j = senden(text, reply_markup=kb, **({'reply_to_message_id': mid} if mid else {}))
+    if isinstance(j, dict) and j.get('ok'):
+        merke(z, 'Claude', f'Beitrag zur Freigabe geschickt: {e["titel"]}')
+        log('Zur Freigabe geschickt:', pid)
+        return True
+    return False
+
+
+def offene_neu_senden(z):
+    for e in sorted(z['beitraege'].values(), key=lambda x: x.get('zeit') or ''):
+        if e.get('status') == 'wartet' and e.get('art'):
+            e.pop('insta_knopf_nachreichen', None)
+            freigabe_senden(z, e)
+
+
 def neue_beitraege(z):
     L = z['beitraege']
     grenze = time.time() - 21 * 86400
@@ -300,21 +328,8 @@ def neue_beitraege(z):
              'zeit': termin, 'art': art, 'bilder': bilder, 'video': video, 'vorschau': vorschau,
              'plattformen': b.get('plattformen') or ['tiktok'], 'sound': str(b.get('sound') or '')[:200],
              'quelle': 'github', 'status': 'wartet', 'geliefert': iso()}
-        st, j = tg('sendVideo', chat_id=CHAT, video=vorschau, caption=e['titel'][:1000])
-        mid = (j.get('result') or {}).get('message_id') if isinstance(j, dict) else None
-        wann = (f'\n\n🗓 Geplant für {termin[8:10]}.{termin[5:7]}. um {termin[11:]} Uhr' if termin else '\n\n🗓 Ohne Termin')
-        was = f'Slideshow zum Wischen ({len(bilder)} Bilder, hier als Vorschau-Video)' if art == 'fotos' else 'Video'
-        text = (f'<b>{esc(e["titel"])}</b>\n{was}{wann}' + (f'\n🎵 Sound-Idee: {esc(e["sound"])}' if e['sound'] else '') +
-                f'\n\n<b>Beschreibung:</b>\n{esc(e["caption"])}\n\n✅ Go: kommt gleich als Entwurf in dein TikTok-Postfach, zum Termin erinnere ich dich.'
-                '\n🔁 Neu: Claude baut eine andere Version.\n❌ Verwerfen: wird nicht gepostet.\n📸 Insta 19:00: geht zusätzlich als Reel auf Instagram.')
-        kb = {'inline_keyboard': [[{'text': '✅ Go', 'callback_data': f'go|{pid}'}, {'text': '🔁 Neu', 'callback_data': f'neu|{pid}'},
-                                   {'text': '❌ Verwerfen', 'callback_data': f'weg|{pid}'}],
-                                  [{'text': '📸 Insta 19:00', 'callback_data': f'insta|{pid}'}]]}
-        st, j = senden(text, reply_markup=kb, **({'reply_to_message_id': mid} if mid else {}))
-        if isinstance(j, dict) and j.get('ok'):
+        if freigabe_senden(z, e):
             L[pid] = e
-            merke(z, 'Claude', f'Beitrag zur Freigabe geschickt: {e["titel"]}')
-            log('Zur Freigabe geschickt:', pid)
 
 
 # ---------------------------------------------------------------- TikTok
@@ -489,7 +504,9 @@ def main():
         tiktok_link(z)
     elif cmd == 'connect':
         tiktok_verbinden(z, sys.argv[2])
-    elif cmd == 'loop':
+    elif cmd in ('loop', 'resend-offen'):
+        if cmd == 'resend-offen':
+            offene_neu_senden(z)
         # läuft ca. 55 Minuten und prüft jede Minute; GitHub startet alle 30 Minuten einen neuen Lauf (wartet in der Schlange)
         ende = time.time() + int(os.environ.get('PB_LOOP_MIN', '55')) * 60
         while True:

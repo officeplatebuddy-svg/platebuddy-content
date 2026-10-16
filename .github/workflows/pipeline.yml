@@ -9,7 +9,7 @@ on:
         description: 'run = normaler Lauf, connect-start = TikTok-Verbinden-Link nach Telegram schicken'
         default: loop
         type: choice
-        options: [loop, run, connect-start]
+        options: [loop, run, connect-start, resend-offen]
 
 concurrency:
   group: platebuddy-pipeline
