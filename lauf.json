@@ -1,9 +1,13 @@
 {
- "zeit": "2026-10-16T19:48:42+00:00",
- "aktion": "run",
+ "zeit": "2026-10-16T19:51:28+00:00",
+ "aktion": "loop",
  "telegram": {
   "getWebhookInfo": "ok",
-  "getUpdates": "ok"
+  "getUpdates": "ok",
+  "answerCallbackQuery": "400 Bad Request: query is too old and response timeout expired or query ID is invalid",
+  "editMessageText": "400 Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message",
+  "sendMessage": "ok",
+  "editMessageReplyMarkup": "ok"
  },
  "fehler": [],
  "secrets": {
