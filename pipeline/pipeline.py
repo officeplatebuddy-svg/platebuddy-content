@@ -150,12 +150,18 @@ def einmal_am_tag(z, key):
 
 # ---------------------------------------------------------------- Telegram
 
+DIAG = {'telegram': {}, 'fehler': []}
+
+
 def tg(method, **params):
     if not TG_TOKEN:
+        DIAG['fehler'].append('TELEGRAM_BOT_TOKEN fehlt')
         return 0, {'ok': False, 'description': 'TELEGRAM_BOT_TOKEN fehlt'}
     st, j = http('POST', f'https://api.telegram.org/bot{TG_TOKEN}/{method}', data=params)
-    if not (isinstance(j, dict) and j.get('ok')):
-        log('Telegram', method, 'fehlgeschlagen:', (j.get('description') if isinstance(j, dict) else str(j)[:200]))
+    ok = isinstance(j, dict) and j.get('ok')
+    DIAG['telegram'][method] = 'ok' if ok else f'{st} ' + str((j.get('description') if isinstance(j, dict) else str(j)[:120]))[:160]
+    if not ok:
+        log('Telegram', method, 'fehlgeschlagen:', DIAG['telegram'][method])
     return st, j
 
 
@@ -489,11 +495,16 @@ def main():
                 schritt(z)
             except Exception as e:
                 log('Fehler in', schritt.__name__, type(e).__name__, e)
+                DIAG['fehler'].append(f'{schritt.__name__}: {type(e).__name__}')
     if json.dumps(z, sort_keys=True) != vorher or not (STATE_DIR / 'state.enc').exists():
         speichere_zustand(z)
         log('Zustand gespeichert.')
     else:
         log('Nichts geändert.')
+    STATE_DIR.mkdir(parents=True, exist_ok=True)   # öffentliche Lauf-Diagnose ohne Inhalte
+    (STATE_DIR / 'lauf.json').write_text(json.dumps({'zeit': iso(), 'aktion': cmd, 'telegram': DIAG['telegram'], 'fehler': DIAG['fehler'][-10:],
+        'secrets': {'telegram': bool(TG_TOKEN), 'tiktok_key': bool(TT_KEY), 'tiktok_secret': bool(TT_SECRET), 'instagram': bool(IG_TOKEN_SECRET)},
+        'tiktok_verbunden': bool((z.get('tiktok') or {}).get('refresh_token')), 'offene_notizen': sum(1 for n in z['notizen'] if n.get('status') == 'offen')}, indent=1))
 
 
 if __name__ == '__main__':
