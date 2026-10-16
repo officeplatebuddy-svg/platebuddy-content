@@ -1,10 +1,10 @@
 {
- "zeit": "2026-10-16T10:12:55+00:00",
+ "zeit": "2026-10-16T10:13:58+00:00",
  "aktion": "loop",
  "telegram": {
   "getWebhookInfo": "ok",
   "getUpdates": "ok",
-  "answerCallbackQuery": "ok",
+  "answerCallbackQuery": "400 Bad Request: query is too old and response timeout expired or query ID is invalid",
   "editMessageText": "ok",
   "sendMessage": "ok"
  },
