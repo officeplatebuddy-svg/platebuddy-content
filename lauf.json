@@ -1,0 +1,18 @@
+{
+ "zeit": "2026-10-16T08:46:27+00:00",
+ "aktion": "run",
+ "telegram": {
+  "getWebhookInfo": "ok",
+  "getUpdates": "ok",
+  "sendMessage": "ok"
+ },
+ "fehler": [],
+ "secrets": {
+  "telegram": true,
+  "tiktok_key": true,
+  "tiktok_secret": true,
+  "instagram": true
+ },
+ "tiktok_verbunden": false,
+ "offene_notizen": 0
+}
