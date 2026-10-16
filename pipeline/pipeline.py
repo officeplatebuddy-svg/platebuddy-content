@@ -192,6 +192,10 @@ def telegram_lesen(z):
             log('Update übersprungen:', type(e).__name__, e)
 
 
+def insta_knopf(pid):
+    return {'inline_keyboard': [[{'text': '📸 Auch auf Insta posten (19:00)', 'callback_data': f'insta|{pid}'}]]}
+
+
 def knopf(z, cq):
     msg = cq.get('message') or {}
     chat = str((msg.get('chat') or {}).get('id', ''))
@@ -236,7 +240,12 @@ def knopf(z, cq):
         hinweis = 'Unbekannter Knopf.'
     tg('answerCallbackQuery', callback_query_id=cq.get('id', ''), text=hinweis)
     if neu_text and msg.get('message_id'):
-        tg('editMessageText', chat_id=CHAT, message_id=msg['message_id'], text=neu_text)
+        extra = {}
+        if aktion == 'go' and e.get('insta') not in ('geplant', 'online'):
+            extra['reply_markup'] = insta_knopf(e['id'])
+        tg('editMessageText', chat_id=CHAT, message_id=msg['message_id'], text=neu_text, **extra)
+    elif aktion == 'insta' and e and e.get('insta') == 'geplant' and msg.get('message_id'):
+        tg('editMessageReplyMarkup', chat_id=CHAT, message_id=msg['message_id'], reply_markup={'inline_keyboard': []})
     if aktion == 'neu' and e and e.get('status') == 'neu':
         st, j = senden(f'🔁 Was soll an <b>{esc(e["titel"])}</b> anders sein? Antworte direkt auf diese Nachricht '
                        '(z. B. „Hook frecher“, „anderes Gericht“, „kürzer“).',
@@ -445,7 +454,8 @@ def tiktok_hochladen(z):
             senden(f'📥 <b>{esc(e["titel"])}</b> liegt jetzt in deinem TikTok-Postfach' +
                    (f' (posten um {e["zeit"][11:]} Uhr, ich erinnere dich)' if e.get('zeit') else '') +
                    '.\nTikTok-App öffnen → Postfach/Benachrichtigungen → Entwurf öffnen, Sound wählen, posten.' +
-                   (f'\n\n<b>Beschreibung zum Kopieren:</b>\n{esc(e["caption"])}' if e['art'] == 'video' else ''))
+                   (f'\n\n<b>Beschreibung zum Kopieren:</b>\n{esc(e["caption"])}' if e['art'] == 'video' else ''),
+                   **({'reply_markup': insta_knopf(e['id'])} if e.get('insta') not in ('geplant', 'online') else {}))
             log('TikTok-Entwurf:', e['id'])
         else:
             grund = err.get('message') or err.get('code') or str(j)[:300]
@@ -531,6 +541,11 @@ def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else 'run'
     z = lade_zustand()
     vorher = json.dumps(z, sort_keys=True)
+    if not z['hinweise'].get('insta_knopf_v2'):        # einmalig: Insta-Knopf für schon freigegebene Posts nachreichen
+        z['hinweise']['insta_knopf_v2'] = True
+        for e in z['beitraege'].values():
+            if e.get('tiktok') == 'entwurf' and e.get('insta') not in ('geplant', 'online') and (e.get('zeit') or '')[:10] >= jetzt()[:10]:
+                senden(f'📸 <b>{esc(e["titel"])}</b> ist schon im TikTok-Postfach. Auch auf Instagram?', reply_markup=insta_knopf(e['id']))
     if z['hinweise'].pop('neustart', False):
         senden('ℹ️ Die Pipeline hat mit einem neuen Speicher angefangen (STATE_KEY wurde geändert). Bitte TikTok neu verbinden: schreib <code>/tiktok</code>.')
     if cmd == 'connect-start':
