@@ -1,0 +1,71 @@
+name: PlateBuddy Pipeline
+
+on:
+  schedule:
+    - cron: '*/5 5-21 * * *'   # alle 5 Minuten, ca. 7–23 Uhr Wiener Zeit
+  workflow_dispatch:
+    inputs:
+      aktion:
+        description: 'run = normaler Lauf, connect-start = TikTok-Verbinden-Link nach Telegram schicken'
+        default: run
+        type: choice
+        options: [run, connect-start]
+
+concurrency:
+  group: platebuddy-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  lauf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Eingeschaltet?
+        id: an
+        run: |
+          if [ -f pipeline/AKTIV ] || [ "${{ inputs.aktion }}" = "connect-start" ]; then echo "an=ja" >> "$GITHUB_OUTPUT"; else echo "Pipeline ist noch aus (pipeline/AKTIV fehlt)."; fi
+
+      - name: Zustand holen (Branch state)
+        if: steps.an.outputs.an == 'ja'
+        run: |
+          if git fetch --depth=1 origin state 2>/dev/null; then
+            git worktree add _state FETCH_HEAD
+          else
+            git worktree add --orphan -b state _state
+          fi
+
+      - uses: actions/setup-python@v5
+        if: steps.an.outputs.an == 'ja'
+        with:
+          python-version: '3.12'
+
+      - if: steps.an.outputs.an == 'ja'
+        run: pip install --quiet cryptography
+
+      - name: Pipeline
+        if: steps.an.outputs.an == 'ja'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
+          TIKTOK_CLIENT_SECRET: ${{ secrets.TIKTOK_CLIENT_SECRET }}
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          STATE_KEY: ${{ secrets.STATE_KEY }}
+          AKTION: ${{ inputs.aktion || 'run' }}
+          PB_STATE_DIR: ${{ github.workspace }}/_state
+        run: python3 pipeline/pipeline.py "$AKTION"
+
+      - name: Zustand sichern
+        if: always() && steps.an.outputs.an == 'ja'
+        run: |
+          cd _state
+          git config user.name "PlateBuddy Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Zustand unverändert"; exit 0; fi
+          git commit -q -m "Zustand $(date -u +%FT%TZ)"
+          git push -q origin HEAD:state

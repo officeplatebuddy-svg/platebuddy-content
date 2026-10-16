@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TikTok verbinden · PlateBuddy</title>
+<style>
+  :root{--cream:#F7F4EC;--forest:#07130C;--green:#20C060;--muted:#5E6B62}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--cream);color:var(--forest);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+  main{max-width:460px;width:100%;background:#fff;border-radius:24px;padding:28px 22px;box-shadow:0 20px 50px rgba(7,19,12,.12)}
+  h1{font-size:24px;margin:0 0 8px}
+  p{line-height:1.45;color:var(--muted);margin:0 0 16px}
+  .code{font-family:ui-monospace,Menlo,monospace;font-size:15px;word-break:break-all;background:#EFEADB;border-radius:12px;padding:14px;margin:0 0 14px;color:var(--forest)}
+  button{width:100%;border:0;border-radius:999px;padding:15px;font-size:17px;font-weight:700;background:var(--green);color:var(--forest);cursor:pointer}
+  .ok{color:var(--forest);font-weight:600}
+  .err{color:#B3261E}
+</style>
+</head>
+<body>
+<main>
+  <h1>TikTok verbinden</h1>
+  <div id="inhalt"><p>Einen Moment …</p></div>
+</main>
+<script>
+  const q = new URLSearchParams(location.search);
+  const code = q.get('code');
+  const box = document.getElementById('inhalt');
+  if (code) {
+    const befehl = '/tiktok ' + code;
+    box.innerHTML = '<p>Fast geschafft. Kopier diese Zeile und schick sie in eure PlateBuddy-Telegram-Gruppe:</p>' +
+      '<div class="code" id="c"></div><button id="b">Kopieren</button><p id="m" style="margin-top:14px"></p>';
+    document.getElementById('c').textContent = befehl;
+    document.getElementById('b').onclick = async () => {
+      try { await navigator.clipboard.writeText(befehl); document.getElementById('m').innerHTML = '<span class="ok">Kopiert ✓ Jetzt in Telegram einfügen und senden.</span>'; }
+      catch (e) { document.getElementById('m').textContent = 'Bitte die Zeile oben markieren und kopieren.'; }
+    };
+  } else if (q.get('error')) {
+    box.innerHTML = '<p class="err">TikTok hat die Verbindung abgelehnt.</p><p>Schreib in Telegram <b>/tiktok</b>, dann kommt ein neuer Link.</p>';
+  } else {
+    box.innerHTML = '<p>Diese Seite wird nach dem Bestätigen bei TikTok automatisch geöffnet. Schreib in Telegram <b>/tiktok</b>, um den Link zu bekommen.</p>';
+  }
+</script>
+</body>
+</html>
