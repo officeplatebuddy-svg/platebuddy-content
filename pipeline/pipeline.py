@@ -131,6 +131,10 @@ def speichere_zustand(z):
               'tiktok': e.get('tiktok', ''), 'insta': e.get('insta', '')}
              for e in sorted(z['beitraege'].values(), key=lambda x: x.get('geliefert', ''), reverse=True)[:30]]
     (STATE_DIR / 'beitraege-status.json').write_text(json.dumps(offen, ensure_ascii=False, indent=1))
+    wuensche = [{'id': e['id'], 'titel': e.get('titel', ''), 'zeit': e.get('zeit', ''), 'wunsch': e.get('wunsch', ''),
+                 'von': e.get('wunsch_von', ''), 'seit': e.get('wunsch_zeit') or e.get('entschieden', '')}
+                for e in z['beitraege'].values() if e.get('status') == 'neu']
+    (STATE_DIR / 'wuensche.json').write_text(json.dumps(wuensche, ensure_ascii=False, indent=1))
 
 
 def merke(z, wer, text):
@@ -223,7 +227,7 @@ def knopf(z, cq):
                         'als Entwurf in dein TikTok-Postfach.' + (f' Um {e["zeit"][11:]} Uhr erinnere ich dich ans Posten.' if e.get('zeit') else ''))
         elif aktion == 'neu':
             hinweis = 'Neue Version angefordert.'
-            neu_text = f'🔁 {wer} möchte eine neue Version von „{e["titel"]}“ ({uhr} Uhr). Claude baut sie beim nächsten Morgenlauf. Schreib als Antwort auf diese Nachricht, was anders sein soll.'
+            neu_text = f'🔁 {wer} möchte eine neue Version von „{e["titel"]}“ ({uhr} Uhr). Claude baut sie und schickt sie hier wieder zur Freigabe.'
         else:
             hinweis = 'Verworfen.'
             neu_text = f'❌ „{e["titel"]}“ wurde von {wer} verworfen ({uhr} Uhr). Es wird nichts gepostet.'
@@ -233,6 +237,12 @@ def knopf(z, cq):
     tg('answerCallbackQuery', callback_query_id=cq.get('id', ''), text=hinweis)
     if neu_text and msg.get('message_id'):
         tg('editMessageText', chat_id=CHAT, message_id=msg['message_id'], text=neu_text)
+    if aktion == 'neu' and e and e.get('status') == 'neu':
+        st, j = senden(f'🔁 Was soll an <b>{esc(e["titel"])}</b> anders sein? Antworte direkt auf diese Nachricht '
+                       '(z. B. „Hook frecher“, „anderes Gericht“, „kürzer“).',
+                       reply_markup={'force_reply': True, 'selective': False, 'input_field_placeholder': 'Was soll anders sein?'})
+        if isinstance(j, dict) and j.get('ok'):
+            e['neu_frage_mid'] = j['result']['message_id']
 
 
 def nachricht(z, m):
@@ -249,6 +259,14 @@ def nachricht(z, m):
         return
     rb = m.get('reply_to_message') or {}
     an_bot = bool((rb.get('from') or {}).get('is_bot'))
+    ziel = next((e for e in z['beitraege'].values() if rb.get('message_id') and e.get('neu_frage_mid') == rb.get('message_id')), None)
+    if ziel and text:                                   # Antwort auf „Was soll anders sein?“
+        ziel['wunsch'] = (ziel.get('wunsch', '') + ('\n' if ziel.get('wunsch') else '') + text)[:1500]
+        ziel['wunsch_von'] = wer; ziel['wunsch_zeit'] = iso(); ziel['status'] = 'neu'
+        merke(z, wer, f'Wunsch zu {ziel["titel"]}: {text}')
+        senden(f'📝 Danke, {esc(wer)}! Claude baut eine neue Version von <b>{esc(ziel["titel"])}</b> mit: „{esc(text[:300])}“. '
+               'Sie kommt hier wieder mit Video zur Freigabe.', reply_to_message_id=m.get('message_id'))
+        return
     if text.lower().startswith(('/claude', '/jarvis')) or (an_bot and text):
         auftrag = text.split(None, 1)[1] if text.startswith('/') and ' ' in text else ('' if text.startswith('/') else text)
         if not auftrag:
@@ -330,6 +348,12 @@ def neue_beitraege(z):
              'quelle': 'github', 'status': 'wartet', 'geliefert': iso()}
         if freigabe_senden(z, e):
             L[pid] = e
+            import re
+            m_v = re.match(r'(.+)-v\d+$', pid)
+            if m_v:
+                for k, alt in L.items():
+                    if k != pid and (k == m_v.group(1) or k.startswith(m_v.group(1) + '-v')) and alt.get('status') in ('neu', 'wartet'):
+                        alt['status'] = 'ersetzt'
 
 
 # ---------------------------------------------------------------- TikTok
