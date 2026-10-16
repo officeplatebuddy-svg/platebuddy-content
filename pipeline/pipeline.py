@@ -489,22 +489,56 @@ def main():
         tiktok_link(z)
     elif cmd == 'connect':
         tiktok_verbinden(z, sys.argv[2])
+    elif cmd == 'loop':
+        # läuft ca. 55 Minuten und prüft jede Minute; GitHub startet alle 30 Minuten einen neuen Lauf (wartet in der Schlange)
+        ende = time.time() + int(os.environ.get('PB_LOOP_MIN', '55')) * 60
+        while True:
+            vor = json.dumps(z, sort_keys=True)
+            durchlauf(z)
+            if json.dumps(z, sort_keys=True) != vor:
+                speichere_zustand(z); schreibe_diagnose(z, cmd); sichern()
+            if time.time() + 60 > ende:
+                break
+            time.sleep(60)
     else:
-        for schritt in (telegram_lesen, neue_beitraege, tiktok_hochladen, erinnern, instagram):
-            try:
-                schritt(z)
-            except Exception as e:
-                log('Fehler in', schritt.__name__, type(e).__name__, e)
-                DIAG['fehler'].append(f'{schritt.__name__}: {type(e).__name__}')
+        durchlauf(z)
     if json.dumps(z, sort_keys=True) != vorher or not (STATE_DIR / 'state.enc').exists():
         speichere_zustand(z)
         log('Zustand gespeichert.')
     else:
         log('Nichts geändert.')
+    schreibe_diagnose(z, cmd)
+
+
+def durchlauf(z):
+    for schritt in (telegram_lesen, neue_beitraege, tiktok_hochladen, erinnern, instagram):
+        try:
+            schritt(z)
+        except Exception as e:
+            log('Fehler in', schritt.__name__, type(e).__name__, e)
+            DIAG['fehler'].append(f'{schritt.__name__}: {type(e).__name__}')
+
+
+def schreibe_diagnose(z, cmd):
     STATE_DIR.mkdir(parents=True, exist_ok=True)   # öffentliche Lauf-Diagnose ohne Inhalte
     (STATE_DIR / 'lauf.json').write_text(json.dumps({'zeit': iso(), 'aktion': cmd, 'telegram': DIAG['telegram'], 'fehler': DIAG['fehler'][-10:],
         'secrets': {'telegram': bool(TG_TOKEN), 'tiktok_key': bool(TT_KEY), 'tiktok_secret': bool(TT_SECRET), 'instagram': bool(IG_TOKEN_SECRET)},
         'tiktok_verbunden': bool((z.get('tiktok') or {}).get('refresh_token')), 'offene_notizen': sum(1 for n in z['notizen'] if n.get('status') == 'offen')}, indent=1))
+
+
+def sichern():
+    """Zustand sofort in den Branch state pushen (für den Dauerlauf)."""
+    import subprocess
+    if not os.environ.get('GITHUB_ACTIONS'):
+        return
+    r = lambda *a: subprocess.run(['git', '-C', str(STATE_DIR), *a], capture_output=True, text=True)
+    r('add', '-A')
+    if r('diff', '--cached', '--quiet').returncode == 0:
+        return
+    r('commit', '-q', '-m', 'Zustand ' + iso())
+    p = r('push', '-q', 'origin', 'HEAD:state')
+    if p.returncode != 0:
+        log('Push des Zustands fehlgeschlagen:', p.stderr[-200:])
 
 
 if __name__ == '__main__':
