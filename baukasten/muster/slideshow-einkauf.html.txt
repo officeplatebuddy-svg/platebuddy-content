@@ -1,0 +1,50 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><link rel="stylesheet" href="../../base.css">
+</head><body>
+
+<section class="slide forest"><div class="dots"></div>
+  <div class="abs" style="left:300px;top:900px;width:1300px;height:1300px;border-radius:50%;background:var(--surface)"></div>
+  <div class="safe">
+    <div class="kicker" style="background:var(--green);color:var(--forest)">Einkaufen mit PlateBuddy</div>
+    <div class="d abs" style="top:150px;font-size:150px;line-height:.95;width:860px">Im Supermarkt wieder im Zickzack gelaufen?</div>
+    <div class="em abs" style="left:560px;top:860px;font-size:280px;transform:rotate(8deg)">🛒</div>
+    <div class="swipe"><i>→</i>So sieht die Liste aus</div>
+  </div>
+</section>
+
+<section class="slide cream"><div class="dots"></div><div class="blob" style="left:160px;top:820px;width:900px;height:900px"></div>
+  <div class="safe"><span class="fnum">1</span><div class="stand">PlateBuddy</div>
+    <div class="ftitle">Deine Liste, nach Regalen sortiert.</div>
+    <div class="card" style="top:420px;transform:rotate(-1.5deg)"><div class="crop" style="background-image:url(../../screens/44_einkaufsliste.png);--x:40;--y:1420;--w:1126;--h:842"></div></div>
+    <div class="note" style="top:1130px">Obst zu Obst, Kühlregal zu Kühlregal. Du gehst einmal durch.</div>
+  </div></section>
+
+<section class="slide cream"><div class="dots"></div><div class="blob" style="left:120px;top:760px;width:840px;height:840px"></div>
+  <div class="safe"><span class="fnum">2</span><div class="stand">PlateBuddy</div>
+    <div class="ftitle">Abhaken, während du gehst.</div>
+    <div class="phone" style="left:215px;top:420px;width:430px;height:935px;transform:rotate(3deg)"><img src="../../screens/45_einkauf_regale.png" style="object-position:0 -60px"></div>
+  </div></section>
+
+<section class="slide cream"><div class="dots"></div><div class="blob" style="left:-200px;top:700px;width:900px;height:900px"></div>
+  <div class="safe"><span class="fnum">3</span><div class="stand">PlateBuddy</div>
+    <div class="ftitle">Eingekauft? Ab in den Vorrat.</div>
+    <div class="card" style="top:400px;transform:rotate(1.2deg)"><div class="crop" style="background-image:url(../../screens/44_einkaufsliste.png);--x:40;--y:640;--w:1126;--h:436"></div></div>
+    <div class="card" style="top:760px;transform:rotate(-1.2deg)"><div class="crop" style="background-image:url(../../screens/49_vorrat.png);--x:40;--y:1480;--w:1126;--h:750"></div></div>
+  </div></section>
+
+<section class="slide cream"><div class="dots"></div><div class="blob" style="left:200px;top:760px;width:900px;height:900px"></div>
+  <div class="safe"><span class="fnum">4</span><div class="stand">PlateBuddy</div>
+    <div class="ftitle">Und du siehst, was bald weg muss.</div>
+    <div class="card" style="top:480px;transform:rotate(-1.5deg)"><div class="crop" style="background-image:url(../../screens/49_vorrat.png);--x:40;--y:556;--w:1126;--h:424"></div></div>
+    <div class="note" style="top:880px">Damit es gekocht wird, bevor es im Müll landet.</div>
+    <div class="em abs" style="left:300px;top:1060px;font-size:220px;transform:rotate(-6deg)">🥬</div>
+  </div></section>
+
+<section class="slide dark"><div class="dots"></div>
+  <div class="abs" style="left:-110px;top:120px;width:1300px;height:1300px;border-radius:50%;background:var(--forest)"></div>
+  <div class="safe" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+    <img src="../../icon.png" style="width:300px;height:300px;border-radius:68px;box-shadow:0 30px 70px rgba(0,0,0,.45)">
+    <div class="d" style="font-size:150px;margin-top:50px">PlateBuddy</div>
+    <div style="margin-top:34px;padding:20px 40px;border-radius:999px;background:var(--green);color:var(--forest);font-size:52px;font-weight:800">Bald im App Store</div>
+    <div style="margin-top:44px;font-size:46px;font-weight:600;line-height:1.25;opacity:.85;width:760px">Folgen, damit du den Start nicht verpasst.</div>
+  </div></section>
+</body></html>

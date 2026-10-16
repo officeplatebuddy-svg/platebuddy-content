@@ -1,0 +1,72 @@
+<title>PlateBuddy Baukasten</title>
+<style>
+/* Layout: eine ruhige Arbeitsseite – links die Regeln, darunter das Bildarchiv als Raster echter App-Screens */
+:root{--bg:#F7F4EC;--surface:#EFEADB;--ink:#07130C;--muted:#55635A;--line:#DCD5C2;--accent:#189048;--chip:#102E23;--chip-ink:#F7F4EC;
+  --display:"Inter Display","Inter",system-ui,sans-serif;--body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#07130C;--surface:#102E23;--ink:#F7F4EC;--muted:#A9B8AE;--line:#1E4133;--accent:#20C060;--chip:#20C060;--chip-ink:#07130C;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#07130C;--surface:#102E23;--ink:#F7F4EC;--muted:#A9B8AE;--line:#1E4133;--accent:#20C060;--chip:#20C060;--chip-ink:#07130C;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:40px 64px;display:flex;flex-direction:column;gap:40px}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(2.2rem,6vw,3.6rem);line-height:1;letter-spacing:-.035em;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:800;font-size:1.5rem;letter-spacing:-.02em;margin:0 0 14px}
+.lead{color:var(--muted);max-width:62ch;margin:14px 0 0;font-size:1.05rem}
+.tag{display:inline-block;background:var(--chip);color:var(--chip-ink);font-weight:800;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;padding:6px 12px;border-radius:999px;margin-bottom:16px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;padding:0;margin:0;list-style:none;counter-reset:s}
+.steps li{background:var(--surface);border-radius:16px;padding:16px 18px;counter-increment:s;min-width:0}
+.steps li::before{content:counter(s);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--bg);font-weight:800;font-size:.9rem;margin-bottom:8px}
+.steps b{display:block}.steps span{color:var(--muted);font-size:.95rem}
+.files{width:100%;border-collapse:collapse;font-size:.95rem}
+.files td{padding:9px 10px 9px 0;border-top:1px solid var(--line);vertical-align:top}
+.files td:first-child{font-family:var(--mono);font-size:.85rem;white-space:nowrap;padding-right:18px}
+.files td:last-child{color:var(--muted)}
+.scroll{overflow-x:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+figure{margin:0;min-width:0}
+figure img{display:block;width:100%;aspect-ratio:1206/2622;object-fit:cover;border-radius:14px;border:1px solid var(--line);background:var(--surface)}
+figcaption{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}
+.warn figcaption{color:#C2571F}
+</style>
+<div class="wrap">
+  <header>
+    <span class="tag">Für @plate.buddy</span>
+    <h1>PlateBuddy Baukasten</h1>
+    <p class="lead">Hier liegen die Bausteine, aus denen Claude die TikTok-Slideshows baut: Gestaltung, Bau-Skripte, das App-Icon und die echten Screenshots der App. Die Regeln für jeden Beitrag stehen in der Datei LIESMICH.</p>
+  </header>
+  <section>
+    <h2>So entsteht ein Beitrag</h2>
+    <ol class="steps">
+      <li><b>Bauen</b><span>Claude baut 5 bis 7 Bilder in 1080 × 1920 aus diesen Bausteinen.</span></li>
+      <li><b>Telegram</b><span>Vorschau und Beschreibung kommen in eure Gruppe, mit Go, Neu und Verwerfen.</span></li>
+      <li><b>Go</b><span>Einer von euch drückt Go. Ohne Go wird nichts veröffentlicht.</span></li>
+      <li><b>TikTok</b><span>Claude lädt am Laptop hoch und plant den Beitrag für 12:00 oder 18:00 Uhr ein.</span></li>
+    </ol>
+  </section>
+  <section>
+    <h2>Dateien</h2>
+    <div class="scroll"><table class="files">
+      <tr><td>kit/LIESMICH.txt</td><td>Regeln, Ablauf und Adressen für Claude-Sitzungen</td></tr>
+      <tr><td>kit/base.css</td><td>Farben, Schrift und Bausteine der Folien</td></tr>
+      <tr><td>kit/baue.py.txt</td><td>baut Bilder, Vorschau-Video und Übersichtsbogen</td></tr>
+      <tr><td>kit/render_video.py.txt</td><td>rendert animierte Videos Bild für Bild</td></tr>
+      <tr><td>kit/muster/…</td><td>zwei fertige Muster: Slideshow „Einkauf“ und Video „Vier Schritte“</td></tr>
+      <tr><td>kit/icon.png</td><td>App-Icon</td></tr>
+    </table></div>
+  </section>
+  <section>
+    <h2>Screenshots der App</h2>
+    <div class="grid">
+      <figure><img src="kit/screens/41_scan_kuehlschrank.png" alt="Kühlschrank fotografieren" loading="lazy"><figcaption>41_scan_kuehlschrank</figcaption></figure>
+      <figure><img src="kit/screens/38_ki_rezept_fertig.png" alt="Rezept fertig" loading="lazy"><figcaption>38_ki_rezept_fertig</figcaption></figure>
+      <figure><img src="kit/screens/39_ki_rezept_karte.png" alt="Rezeptkarte" loading="lazy"><figcaption>39_ki_rezept_karte</figcaption></figure>
+      <figure><img src="kit/screens/18_rezept_detail.png" alt="Rezept im Detail" loading="lazy"><figcaption>18_rezept_detail</figcaption></figure>
+      <figure><img src="kit/screens/26_kochmodus_timer.png" alt="Kochmodus mit Timer" loading="lazy"><figcaption>26_kochmodus_timer</figcaption></figure>
+      <figure><img src="kit/screens/15_wochenplan_mahlzeiten.png" alt="Wochenplan" loading="lazy"><figcaption>15_wochenplan_mahlzeiten</figcaption></figure>
+      <figure><img src="kit/screens/44_einkaufsliste.png" alt="Einkaufsliste" loading="lazy"><figcaption>44_einkaufsliste</figcaption></figure>
+      <figure><img src="kit/screens/45_einkauf_regale.png" alt="Einkauf nach Regalen" loading="lazy"><figcaption>45_einkauf_regale</figcaption></figure>
+      <figure><img src="kit/screens/49_vorrat.png" alt="Vorrat" loading="lazy"><figcaption>49_vorrat</figcaption></figure>
+      <figure><img src="kit/screens/31_home_getrackt.png" alt="Startseite mit Kalorien" loading="lazy"><figcaption>31_home_getrackt</figcaption></figure>
+      <figure><img src="kit/screens/64_gemeinsamer_haushalt.png" alt="Gemeinsamer Haushalt" loading="lazy"><figcaption>64_gemeinsamer_haushalt</figcaption></figure>
+      <figure class="warn"><img src="kit/screens/11_vorschlaege.png" alt="Vorschläge" loading="lazy"><figcaption>11_vorschlaege · zeigt Pro, nicht verwenden</figcaption></figure>
+    </div>
+  </section>
+</div>

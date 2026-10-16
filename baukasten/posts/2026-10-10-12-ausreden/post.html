@@ -1,0 +1,92 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><link rel="stylesheet" href="../../base.css">
+<style>
+html,body{background:#000;overflow:hidden}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--forest)}
+.sc{position:absolute;inset:0;overflow:hidden;will-change:transform}
+.fnum{display:inline-flex;align-items:center;justify-content:center;width:104px;height:104px;border-radius:50%;background:var(--green);color:var(--forest);font-family:"Inter Display";font-weight:900;font-size:62px}
+.ftitle{position:absolute;left:0;top:140px;width:860px;font-family:"Inter Display";font-weight:900;font-size:96px;line-height:.98;letter-spacing:-.04em;transform-origin:0 50%;color:var(--cream)}
+.stand{position:absolute;right:0;top:26px;font-size:32px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.ph{left:215px;top:430px;width:430px;height:935px}
+.glow{position:absolute;border-radius:50%;background:var(--forest)}
+.chip{position:absolute;left:0;height:190px;border-radius:44px;background:var(--surface);box-shadow:0 0 0 3px rgba(247,244,236,.10) inset;display:flex;align-items:center;gap:32px;padding:0 44px 0 36px;transform-origin:0 50%}
+.chip .em{font-size:104px}
+.chip b{font-family:"Inter Display","Inter",sans-serif;font-weight:900;font-size:76px;letter-spacing:-.03em;color:var(--cream)}
+.dcard{position:absolute;left:0;border-radius:44px;overflow:hidden;box-shadow:0 34px 80px rgba(0,0,0,.5),0 0 0 3px rgba(247,244,236,.14)}
+</style></head><body><div id="stage">
+
+<div class="sc slide cream" id="s0"><div class="dots"></div>
+  <div class="abs" style="left:340px;top:980px;width:1300px;height:1300px;border-radius:50%;background:var(--paper)"></div>
+  <div class="safe">
+    <div class="kicker" style="background:var(--orange);color:var(--forest)">Sei ehrlich</div>
+    <div class="d abs" id="t0a" style="top:150px;font-size:150px;line-height:.94;width:860px;transform-origin:0 50%">47 Rezepte gespeichert.</div>
+    <div class="abs" id="t0b" style="top:640px;font-size:96px;font-weight:900;line-height:1.05;width:820px;font-family:'Inter Display'">Gekocht davon: <span style="color:var(--orange)">0.</span></div>
+    <div class="em abs" id="t0c" style="left:520px;top:900px;font-size:300px">💀</div>
+  </div>
+</div>
+
+<div class="sc slide forest" id="s1"><div class="dots"></div>
+  <div class="abs" style="left:-420px;top:900px;width:1300px;height:1300px;border-radius:50%;background:var(--surface);opacity:.6"></div>
+  <div class="safe">
+    <div class="kicker" style="background:var(--orange);color:var(--forest)">Stattdessen jeden Abend</div>
+    <div class="d abs" id="p0" style="top:140px;font-size:120px;width:860px;transform-origin:0 50%">Die üblichen Ausreden:</div>
+    <div class="chip" style="top:480px"><span class="em">🍝</span><b>„Dann halt Nudeln“</b></div>
+    <div class="chip" style="top:710px"><span class="em">🛵</span><b>„Bestell einfach“</b></div>
+    <div class="chip" style="top:940px"><span class="em">🧊</span><b>„Ist nix da“</b></div>
+  </div>
+</div>
+
+<div class="sc slide dark feat"><div class="dots"></div><div class="glow" style="left:120px;top:760px;width:840px;height:840px"></div>
+  <div class="safe"><span class="fnum">1</span><div class="stand">PlateBuddy</div>
+    <div class="ftitle">„Ist nix da“? Mach ein Foto.</div>
+    <div class="phone ph vis" data-r="-3"><img src="../../screens/41_scan_kuehlschrank.png"></div></div></div>
+
+<div class="sc slide dark feat"><div class="dots"></div><div class="glow" style="left:260px;top:700px;width:900px;height:900px"></div>
+  <div class="safe"><span class="fnum">2</span><div class="stand">PlateBuddy</div>
+    <div class="ftitle">Zack: ein Rezept aus genau dem.</div>
+    <div class="dcard vis" data-r="1.5" style="top:440px"><div class="crop" style="background-image:url(../../screens/39_ki_rezept_karte.png);--x:40;--y:800;--w:1126;--h:890"></div></div>
+    <div class="abs" id="n3" style="top:1130px;font-size:58px;font-weight:700;line-height:1.2;width:800px;color:var(--cream)">Kein Einkauf.<br><span style="color:var(--green)">Keine Ausrede.</span></div></div></div>
+
+<div class="sc slide greenbg" id="s4"><div class="dots"></div>
+  <div class="abs" style="left:-260px;top:1080px;width:1500px;height:1500px;border-radius:50%;background:var(--leaf);opacity:.55"></div>
+  <div class="safe">
+    <div class="d abs" id="q1" style="top:200px;font-size:150px;line-height:.95;width:860px;transform-origin:0 50%">Rezept Nr. 48 kochst du dann wirklich.</div>
+    <div class="em abs" id="q2" style="left:540px;top:900px;font-size:280px">😏</div>
+  </div>
+</div>
+
+<div class="sc slide dark" id="s5"><div class="dots"></div>
+  <div class="abs" style="left:-110px;top:120px;width:1300px;height:1300px;border-radius:50%;background:var(--forest)"></div>
+  <div class="safe" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+    <img id="e1" src="../../icon.png" style="width:300px;height:300px;border-radius:68px;box-shadow:0 30px 70px rgba(0,0,0,.45)">
+    <div class="d" id="e2" style="font-size:150px;margin-top:50px">PlateBuddy</div>
+    <div id="e3" style="margin-top:34px;padding:20px 40px;border-radius:999px;background:var(--green);color:var(--forest);font-size:52px;font-weight:800">Bald im App Store</div>
+    <div id="e4" style="margin-top:44px;font-size:46px;font-weight:600;line-height:1.25;opacity:.85;width:760px">Folgen, damit du den Start nicht verpasst.</div>
+  </div>
+</div>
+</div>
+<script>
+const SEG=2.4, scs=[...document.querySelectorAll('.sc')];
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), p=(t,a,d)=>cl((t-a)/d), oc=x=>1-Math.pow(1-x,3);
+const ob=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const $=id=>document.getElementById(id);
+function slam(el,t,a,d=0.24){const k=p(t,a,d);el.style.opacity=cl(k*3);el.style.transform=`scale(${1.18-0.18*oc(k)})`}
+function pop(el,t,a,d=0.36,r=0){const k=p(t,a,d);el.style.opacity=cl(k*4);el.style.transform=`scale(${k<=0?0:ob(k)}) rotate(${r}deg)`}
+function rise(el,t,a,d=0.3,dy=60){const k=oc(p(t,a,d));el.style.opacity=k;el.style.transform=`translateY(${(1-k)*dy}px)`}
+window.renderAt=function(t){
+  scs.forEach((s,i)=>{
+    const t0=i*SEG,t1=t0+SEG, vis=t>=t0&&(t<t1+0.34||i===scs.length-1); s.style.display=vis?'block':'none'; if(!vis)return;
+    s.style.zIndex=i+1; const lt=t-t0;
+    const kin=i===0?1:oc(p(t,t0,0.32)), kout=i===scs.length-1?0:oc(p(t,t1,0.32));
+    s.style.transform=`translateX(${(1-kin)*1080-kout*320}px)`;
+    if(i===0){const k=oc(p(lt,0,0.3));$('t0a').style.transform=`scale(${1.04-0.04*k})`;rise($('t0b'),lt,0.55);pop($('t0c'),lt,0.95,0.36,8+Math.sin(lt*5)*4)}
+    else if(i===1){slam($('p0'),lt,0.15);s.querySelectorAll('.chip').forEach((c,j)=>pop(c,lt,0.5+j*0.42,0.34,[-1.5,1.2,-1][j]))}
+    else if(s.classList.contains('feat')){
+      pop(s.querySelector('.fnum'),lt,0.12,0.3); slam(s.querySelector('.ftitle'),lt,0.2);
+      const ph=s.querySelector('.vis'), r=+ph.dataset.r, k=oc(p(lt,0.28,0.5));
+      ph.style.opacity=cl(k*2.5); ph.style.transform=`translateY(${(1-k)*420-lt*10}px) rotate(${r*(1-0.25*lt/SEG)}deg) scale(${1+0.025*lt})`;
+      const n=s.querySelector('#n3'); if(n) rise(n,lt,0.9);
+    } else if(s.id==='s4'){slam($('q1'),lt,0.15);pop($('q2'),lt,0.7,0.36,-6+Math.sin(lt*4)*5)} else {pop($('e1'),lt,0.2,0.4);slam($('e2'),lt,0.4);rise($('e3'),lt,0.65);rise($('e4'),lt,0.9)}
+  });
+};
+document.fonts.ready.then(()=>{window.renderAt(0);window.READY=true});
+</script></body></html>
