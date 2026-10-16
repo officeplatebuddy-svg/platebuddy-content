@@ -29,11 +29,11 @@ IG_API = 'https://graph.instagram.com/v23.0/'
 TT_API = 'https://open.tiktokapis.com/v2/'
 CHAT = os.environ.get('PB_CHAT_ID', '-5374518764')
 
-TG_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
-TT_KEY = os.environ.get('TIKTOK_CLIENT_KEY', '')
-TT_SECRET = os.environ.get('TIKTOK_CLIENT_SECRET', '')
-IG_TOKEN_SECRET = os.environ.get('INSTAGRAM_TOKEN', '')
-STATE_KEY = os.environ.get('STATE_KEY', '')
+TG_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '').strip()
+TT_KEY = os.environ.get('TIKTOK_CLIENT_KEY', '').strip()
+TT_SECRET = os.environ.get('TIKTOK_CLIENT_SECRET', '').strip()
+IG_TOKEN_SECRET = os.environ.get('INSTAGRAM_TOKEN', '').strip()
+STATE_KEY = os.environ.get('STATE_KEY', '').strip()
 
 for _s in (TG_TOKEN, TT_SECRET, IG_TOKEN_SECRET, STATE_KEY):   # in GitHub-Logs verbergen
     if _s and os.environ.get('GITHUB_ACTIONS'):
