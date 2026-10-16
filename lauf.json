@@ -1,7 +1,10 @@
 {
- "zeit": "2026-10-16T10:23:44+00:00",
+ "zeit": "2026-10-16T11:18:21+00:00",
  "aktion": "resend-offen",
- "telegram": {},
+ "telegram": {
+  "getWebhookInfo": "ok",
+  "getUpdates": "ok"
+ },
  "fehler": [],
  "secrets": {
   "telegram": true,
