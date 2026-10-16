@@ -1,9 +1,11 @@
 {
- "zeit": "2026-10-16T19:23:34+00:00",
- "aktion": "run",
+ "zeit": "2026-10-16T19:44:46+00:00",
+ "aktion": "loop",
  "telegram": {
   "getWebhookInfo": "ok",
-  "getUpdates": "ok"
+  "getUpdates": "ok",
+  "sendMediaGroup": "ok",
+  "sendMessage": "ok"
  },
  "fehler": [],
  "secrets": {
@@ -14,5 +16,5 @@
  },
  "tiktok_verbunden": true,
  "offene_notizen": 0,
- "instagram_check": "Fehler: Invalid OAuth access token - Cannot parse access token (Secret: L\u00e4nge 32, beginnt mit '51')"
+ "instagram_check": "ok: @platebuddy.app (Secret: L\u00e4nge 178, beginnt mit 'IG')"
 }
