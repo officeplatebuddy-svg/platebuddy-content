@@ -1,13 +1,7 @@
 {
- "zeit": "2026-10-16T10:15:01+00:00",
- "aktion": "loop",
- "telegram": {
-  "getWebhookInfo": "ok",
-  "getUpdates": "ok",
-  "answerCallbackQuery": "400 Bad Request: query is too old and response timeout expired or query ID is invalid",
-  "editMessageText": "ok",
-  "sendMessage": "ok"
- },
+ "zeit": "2026-10-16T10:23:44+00:00",
+ "aktion": "resend-offen",
+ "telegram": {},
  "fehler": [],
  "secrets": {
   "telegram": true,
