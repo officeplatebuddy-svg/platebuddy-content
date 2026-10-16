@@ -210,6 +210,8 @@ def knopf(z, cq):
     elif aktion == 'insta':
         if e.get('insta') == 'online':
             hinweis = 'Ist schon auf Instagram.'
+        elif e.get('insta') == 'geplant':
+            hinweis = f'Ist schon für Insta um 19:00 vorgemerkt.'
         else:
             e['insta'] = 'geplant'; e['insta_von'] = wer
             e['insta_zeit'] = ((e.get('zeit') or '')[:10] or jetzt()[:10]) + 'T19:00'
