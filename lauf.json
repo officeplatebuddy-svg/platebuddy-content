@@ -1,7 +1,10 @@
 {
- "zeit": "2026-10-16T19:20:48+00:00",
- "aktion": "loop",
- "telegram": {},
+ "zeit": "2026-10-16T19:23:34+00:00",
+ "aktion": "run",
+ "telegram": {
+  "getWebhookInfo": "ok",
+  "getUpdates": "ok"
+ },
  "fehler": [],
  "secrets": {
   "telegram": true,
@@ -10,5 +13,6 @@
   "instagram": true
  },
  "tiktok_verbunden": true,
- "offene_notizen": 0
+ "offene_notizen": 0,
+ "instagram_check": "Fehler: Invalid OAuth access token - Cannot parse access token (Secret: L\u00e4nge 32, beginnt mit '51')"
 }
