@@ -103,16 +103,23 @@ def fernet():
 
 def lade_zustand():
     f = STATE_DIR / 'state.enc'
+    neu_wegen_schluessel = False
     if f.exists():
         try:
             return json.loads(fernet().decrypt(f.read_bytes()))
         except InvalidToken:
-            raise SystemExit('state.enc lässt sich nicht entschlüsseln – STATE_KEY geändert?')
+            log('state.enc lässt sich nicht entschlüsseln (STATE_KEY geändert?) – starte mit neuem Zustand.')
+            neu_wegen_schluessel = True
     z = {'beitraege': {}, 'tg_offset': 0, 'notizen': [], 'tiktok': {}, 'instagram': {}, 'hinweise': {}}
     imp = ROOT / 'pipeline' / 'import.json'
-    if imp.exists():
+    if imp.exists() and not neu_wegen_schluessel:
         z['beitraege'].update(json.loads(imp.read_text()))
         log('Zustand aus import.json übernommen:', len(z['beitraege']))
+    # alles, was schon im Repo liegt, gilt als bekannt → nichts wird doppelt verschickt
+    for d in (ROOT / 'beitraege').glob('*/beitrag.json'):
+        z['beitraege'].setdefault(d.parent.name, {'id': d.parent.name, 'titel': d.parent.name, 'status': 'alt', 'quelle': 'github', 'geliefert': iso()})
+    if neu_wegen_schluessel:
+        z['hinweise']['neustart'] = True
     return z
 
 
@@ -254,8 +261,9 @@ def nachricht(z, m):
 def neue_beitraege(z):
     L = z['beitraege']
     grenze = time.time() - 21 * 86400
-    for k in [k for k, e in L.items() if e.get('geliefert') and dt.datetime.fromisoformat(e['geliefert']).timestamp() < grenze]:
-        del L[k]
+    for k, e in L.items():                     # alte Einträge verkleinern, aber merken (sonst käme der Ordner erneut)
+        if e.get('geliefert') and dt.datetime.fromisoformat(e['geliefert']).timestamp() < grenze and len(e) > 5:
+            L[k] = {x: e.get(x) for x in ('id', 'titel', 'status', 'quelle', 'geliefert')}
     for e in L.values():                       # aus n8n übernommene Beiträge bekommen den Insta-Knopf nachgereicht
         if e.pop('insta_knopf_nachreichen', False) and e.get('status') not in ('verworfen',) and e.get('insta') not in ('geplant', 'online'):
             senden(f'📸 Soll <b>{esc(e["titel"])}</b> auch auf Instagram? Dann hier drücken (geht um 19:00 als Reel raus).',
@@ -356,7 +364,7 @@ def tiktok_zugang(z):
 
 
 def tiktok_hochladen(z):
-    faellig = [e for e in z['beitraege'].values() if e.get('quelle') == 'github' and e.get('status') == 'go'
+    faellig = [e for e in z['beitraege'].values() if e.get('quelle') == 'github' and e.get('status') == 'go' and e.get('art')
                and not e.get('tiktok') and 'tiktok' in (e.get('plattformen') or ['tiktok'])]
     if not faellig:
         return
@@ -421,7 +429,7 @@ def ig_token(z):
 
 
 def instagram(z):
-    faellig = [e for e in z['beitraege'].values() if e.get('insta') == 'geplant' and (e.get('insta_zeit') or '') <= jetzt()]
+    faellig = [e for e in z['beitraege'].values() if e.get('insta') == 'geplant' and e.get('vorschau', e.get('video')) and (e.get('insta_zeit') or '') <= jetzt()]
     if not faellig:
         return
     tok = ig_token(z)
@@ -469,6 +477,8 @@ def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else 'run'
     z = lade_zustand()
     vorher = json.dumps(z, sort_keys=True)
+    if z['hinweise'].pop('neustart', False):
+        senden('ℹ️ Die Pipeline hat mit einem neuen Speicher angefangen (STATE_KEY wurde geändert). Bitte TikTok neu verbinden: schreib <code>/tiktok</code>.')
     if cmd == 'connect-start':
         tiktok_link(z)
     elif cmd == 'connect':
