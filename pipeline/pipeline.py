@@ -477,7 +477,7 @@ def tiktok_hochladen(z):
             senden(f'📥 <b>{esc(e["titel"])}</b> liegt jetzt in deinem TikTok-Postfach' +
                    (f' (posten um {e["zeit"][11:]} Uhr, ich erinnere dich)' if e.get('zeit') else '') +
                    '.\nTikTok-App öffnen → Postfach/Benachrichtigungen → Entwurf öffnen, Sound wählen, posten.' +
-                   (f'\n\n<b>Beschreibung zum Kopieren:</b>\n{esc(e["caption"])}' if e['art'] == 'video' else ''),
+                   (f'\n\n<b>Beschreibung (antippen = kopiert):</b>\n<code>{esc(e["caption"])}</code>' if e['art'] == 'video' else ''),
                    **({'reply_markup': insta_knopf(e['id'])} if e.get('insta') not in ('geplant', 'online') else {}))
             log('TikTok-Entwurf:', e['id'])
         else:
@@ -491,7 +491,8 @@ def erinnern(z):
     for e in z['beitraege'].values():
         if e.get('tiktok') == 'entwurf' and not e.get('erinnert') and e.get('zeit') and e['zeit'] <= jetzt():
             e['erinnert'] = iso()
-            senden(f'⏰ Jetzt posten: <b>{esc(e["titel"])}</b> liegt in deinem TikTok-Postfach. Sound wählen und los! 🚀')
+            senden(f'⏰ Jetzt posten: <b>{esc(e["titel"])}</b> liegt in deinem TikTok-Postfach. Sound wählen und los! 🚀' +
+                   (f'\n\n<b>Beschreibung (antippen = kopiert):</b>\n<code>{esc(e.get("caption", ""))}</code>' if e.get('art') == 'video' else ''))
 
 
 # ---------------------------------------------------------------- Instagram
