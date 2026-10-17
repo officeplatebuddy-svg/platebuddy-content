@@ -13,7 +13,7 @@ aus Umgebungsvariablen (GitHub Secrets) und werden nie ausgegeben.
 
 Aufruf:  python3 pipeline.py run | connect-start | connect <code>
 """
-import base64, datetime as dt, hashlib, html, json, os, sys, time, urllib.error, urllib.parse, urllib.request
+import base64, datetime as dt, hashlib, html, json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -529,6 +529,15 @@ def ig_pruefen(z):
         DIAG['ig_check'] = f'Fehler: {((j.get("error") or {}).get("message") if isinstance(j, dict) else str(j)[:100])} (Secret: {form})'
 
 
+def insta_text(c):
+    """Instagram erlaubt seit Dez. 2025 höchstens 5 Hashtags – weitere fallen weg."""
+    n = [0]
+    def f(m):
+        n[0] += 1
+        return m.group(0) if n[0] <= 5 else ''
+    return re.sub(r'\s*#\w+', f, c or '').strip()
+
+
 def instagram(z):
     faellig = [e for e in z['beitraege'].values() if e.get('insta') == 'geplant' and e.get('vorschau', e.get('video')) and (e.get('insta_zeit') or '') <= jetzt()]
     if not faellig:
@@ -541,7 +550,8 @@ def instagram(z):
     for e in faellig[:2]:
         video = e['video'] if e.get('art') == 'video' else e.get('vorschau', '')
         st, j = http('POST', IG_API + IG_ID + '/media', form={'media_type': 'REELS', 'video_url': video,
-                                                              'caption': e.get('caption', '')[:2200], 'share_to_feed': 'true', 'access_token': tok})
+                                                              'caption': insta_text(e.get('caption', ''))[:2200], 'share_to_feed': 'true', 'access_token': tok,
+                                                              **({'thumb_offset': '600'} if e.get('art') == 'video' else {})})
         cid = j.get('id') if isinstance(j, dict) else None
         status, grund = '', ''
         if cid:

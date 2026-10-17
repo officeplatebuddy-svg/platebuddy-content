@@ -1,6 +1,16 @@
 PLATEBUDDY BAUKASTEN – Stand 7.10.2026
 Für Claude-Sitzungen, die Beiträge für den TikTok-Account @plate.buddy bauen, liefern oder hochladen.
 
+VIDEOS (ab 17.10.2026 Hauptformat – erst HANDBUCH.md lesen!)
+Kurzvideos 9:16 (1080x1920, 7–20 s) baut baue_video.py:  cd baukasten && python3 baue_video.py posts/<id>
+post.html bindet ../../base.css, ../../video.css und am Ende ../../video.js ein. Muster: posts/2026-10-17-20-egal (Chat-Video).
+Aufbau: <div id="stage" data-dauer="15"> mit <section class="szene" data-von="SEK" data-ein="schnitt|wisch|blende|zoom|hoch">.
+Elemente animieren ohne eigenes JavaScript: data-a="pop|slam|rise|drop|fade|links|rechts|wackel|zoom|tippen|durch|puls|scroll|zaehl",
+data-t = Start ab Szenenbeginn, data-d = Dauer, data-weg = ausblenden. Chat: .chatkopf, .chat > .verlauf > .msg.ich/.msg.du/.tippt (scrollt selbst).
+Bausteine in video.css: .hook (TikTok-Textbox, .schwarz/.gruen), .hookbox, .handy > .schirm > img (+ .tap mit data-a="puls"), .notiz, .durch, .abspann, .bild, .unscharf.
+Text in .safe (x 60–920, y 150–1420). Telefone/Bilder, die hinausragen dürfen, in ein Element mit class="frei".
+Ergebnis in out/: video.mp4, cover.jpg, _bogen.jpg (1 Bild pro Sekunde – ansehen!). In beitrag.json: "art":"video", "video":"video.mp4", "vorschau":"video.mp4".
+
 1. WORUM ES GEHT
 PlateBuddy ist eine iOS-App für den Küchenalltag (Vorrat, Rezepte, Planung, Einkauf, Tracking). Sie ist noch NICHT im App Store. Ziel der Beiträge: Follower und Kommentare. Gründer: Pascal Barthold und Janik. Sprache: Deutsch, Du-Form.
 Entscheidungen von Pascal (7.10.2026): Slideshows gefallen am besten. Jeder Beitrag dreht sich um die App. Keine Gründer-Beiträge, nichts über „uns“. Sounds kommen aus TikTok. Freigabe per Go-Knopf in Telegram.

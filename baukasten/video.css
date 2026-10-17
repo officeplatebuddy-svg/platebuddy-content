@@ -1,0 +1,53 @@
+/* PlateBuddy Video-Baukasten (9:16, 1080x1920). Zusammen mit base.css einbinden.
+   Aufbau: <div id="stage" data-dauer="14"> <section class="szene" data-von="0"> … </section> … </div>
+   Text gehört in .safe (x 60–920, y 150–1420), dort ist er neben TikTok-/Insta-Knöpfen und Caption sicher. */
+html,body{background:#000;overflow:hidden;margin:0}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Inter",sans-serif}
+.szene{position:absolute;inset:0;overflow:hidden;display:none;transform-origin:50% 50%}
+.szene .safe{position:absolute;left:60px;top:150px;width:860px;height:1270px}
+.voll{position:absolute;inset:0}
+.bild{position:absolute;inset:0;background-size:cover;background-position:center}
+.abdunkeln::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.25) 40%,rgba(0,0,0,.65))}
+.unscharf{filter:blur(28px) brightness(.55);transform:scale(1.15)}
+
+/* TikTok-Textboxen: weiß auf schwarz bzw. schwarz auf weiß, fett, eng */
+.hook{display:inline;font-weight:800;font-size:68px;line-height:1.5;letter-spacing:-.01em;padding:8px 22px;border-radius:16px;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;background:#fff;color:#000}
+.hook.schwarz{background:#000;color:#fff}
+.hook.gruen{background:var(--green);color:var(--forest)}
+.hookbox{position:absolute;left:0;width:860px;text-align:center}
+.gross{font-family:"Inter Display","Inter",sans-serif;font-weight:900;letter-spacing:-.035em;line-height:.98}
+.zeile{display:block}
+
+/* Chat (iMessage, dunkel) */
+.chatkopf{position:absolute;left:0;width:860px;display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:30px;background:#1C1C1E;color:#fff}
+.chatkopf .av{width:96px;height:96px;border-radius:50%;background:#3A3A3C;display:flex;align-items:center;justify-content:center;font-size:48px;font-family:"Noto Color Emoji"}
+.chatkopf b{font-size:46px;font-weight:700;display:block}
+.chatkopf small{font-size:30px;color:#8E8E93}
+.chat{position:absolute;left:0;width:860px;overflow:hidden}
+.verlauf{display:flex;flex-direction:column;gap:16px;padding:6px 4px 30px}
+.msg{max-width:700px;padding:22px 34px 24px;border-radius:44px;font-size:56px;font-weight:500;line-height:1.22;letter-spacing:-.005em;transform-origin:0 100%}
+.msg.du{align-self:flex-start;background:#2C2C2E;color:#fff;border-bottom-left-radius:12px}
+.msg.ich{align-self:flex-end;background:#0A84FF;color:#fff;border-bottom-right-radius:12px;transform-origin:100% 100%}
+.msg.gruen.ich{background:#20C060;color:#07130C}
+.msg .wer{display:block;font-size:28px;font-weight:700;opacity:.65;margin-bottom:4px}
+.msg.laut{font-weight:800}
+.tippt{align-self:flex-start;background:#2C2C2E;border-radius:44px;padding:32px 36px;display:flex;gap:14px;transform-origin:0 100%}
+.tippt i{width:22px;height:22px;border-radius:50%;background:#8E8E93;display:block}
+.zeit{align-self:center;font-size:28px;color:#8E8E93;font-weight:600;margin:6px 0}
+
+/* Telefon mit echtem Screenshot */
+.handy{position:absolute;border-radius:80px;border:16px solid #0A100D;background:#0A100D;overflow:hidden;box-shadow:0 50px 110px rgba(0,0,0,.5),0 0 0 3px rgba(255,255,255,.1) inset}
+.handy .schirm{position:absolute;inset:0;overflow:hidden;border-radius:64px}
+.handy .schirm img{display:block;width:100%}
+.tap{position:absolute;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;border:10px solid rgba(255,255,255,.95);background:rgba(32,192,96,.35)}
+
+/* Notiz/Liste */
+.notiz{position:absolute;left:0;width:860px;background:#FFFBEA;color:#1d1d1f;border-radius:34px;padding:44px 50px;font-size:50px;line-height:1.35;font-weight:500}
+.durch{background:linear-gradient(#E5484D,#E5484D) no-repeat 0 55%/var(--durch,0%) 7px}
+
+/* Abspann klein */
+.abspann{position:absolute;left:0;width:860px;display:flex;align-items:center;gap:24px;color:#fff}
+.abspann img{width:110px;height:110px;border-radius:26px}
+.abspann b{font-size:46px;font-weight:800;display:block}
+.abspann span{font-size:32px;opacity:.8}
