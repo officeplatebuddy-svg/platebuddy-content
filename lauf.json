@@ -1,13 +1,10 @@
 {
- "zeit": "2026-10-17T11:03:37+00:00",
- "aktion": "loop",
+ "zeit": "2026-10-17T11:04:27+00:00",
+ "aktion": "insta-plan",
  "telegram": {
-  "getWebhookInfo": "ok",
-  "getUpdates": "ok",
-  "answerCallbackQuery": "ok",
-  "editMessageText": "ok",
   "sendMessage": "ok",
-  "editMessageReplyMarkup": "400 Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"
+  "getWebhookInfo": "ok",
+  "getUpdates": "ok"
  },
  "fehler": [],
  "secrets": {
