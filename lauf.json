@@ -1,5 +1,5 @@
 {
- "zeit": "2026-10-17T14:43:59+00:00",
+ "zeit": "2026-10-17T15:38:42+00:00",
  "aktion": "loop",
  "telegram": {
   "getWebhookInfo": "ok",
@@ -14,5 +14,5 @@
  },
  "tiktok_verbunden": true,
  "offene_notizen": 0,
- "instagram_check": "ok: @platebuddy.app (Secret: L\u00e4nge 178, beginnt mit 'IG')"
+ "instagram_check": "Fehler: API access blocked. (Secret: L\u00e4nge 178, beginnt mit 'IG')"
 }
