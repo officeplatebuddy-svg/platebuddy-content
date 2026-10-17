@@ -610,6 +610,22 @@ def main():
         elif e.get('insta') != 'online':
             e['insta'] = 'geplant'; e['insta_zeit'] = jetzt(); e.pop('insta_versuche', None)
         durchlauf(z)
+    elif cmd == 'insta-plan':                           # BEITRAG="+id1,-id2": +id um 19:00 auf Insta vormerken, -id austragen
+        for teil in (os.environ.get('BEITRAG') or (sys.argv[2] if len(sys.argv) > 2 else '')).split(','):
+            teil = teil.strip(); bid = teil.lstrip('+-'); e = z['beitraege'].get(bid)
+            if not e or e.get('insta') == 'online':
+                log('Übersprungen:', teil); continue
+            if teil.startswith('-'):
+                if e.get('insta') == 'geplant':
+                    e['insta'] = ''; e.pop('insta_zeit', None)
+                    senden(f'📸 <b>{esc(e["titel"])}</b> geht doch nicht auf Instagram.')
+            else:
+                e['insta'] = 'geplant'; e.pop('insta_versuche', None)
+                e['insta_zeit'] = jetzt()[:10] + 'T19:00'
+                if e['insta_zeit'] < jetzt():
+                    e['insta_zeit'] = (dt.datetime.now(WIEN) + dt.timedelta(days=1)).strftime('%Y-%m-%d') + 'T19:00'
+                senden(f'📸 <b>{esc(e["titel"])}</b> geht am {e["insta_zeit"][8:10]}.{e["insta_zeit"][5:7]}. um 19:00 als Reel auf Instagram.')
+        durchlauf(z)
     elif cmd in ('loop', 'resend-offen'):
         if cmd == 'resend-offen':
             offene_neu_senden(z)

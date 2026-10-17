@@ -9,9 +9,9 @@ on:
         description: 'run = normaler Lauf, connect-start = TikTok-Verbinden-Link nach Telegram schicken'
         default: loop
         type: choice
-        options: [loop, run, connect-start, resend-offen, insta-jetzt]
+        options: [loop, run, connect-start, resend-offen, insta-jetzt, insta-plan]
       beitrag:
-        description: 'nur für insta-jetzt: Kennung des Beitrags'
+        description: 'insta-jetzt: Kennung; insta-plan: +kennung (vormerken), -kennung (austragen), mit Komma getrennt'
         default: ''
         type: string
 
